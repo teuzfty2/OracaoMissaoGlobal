@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { loginRequest } from "./services";
 
 export type User = {
@@ -55,10 +55,13 @@ export const useLogin = create<LoginState>()(
           user: null,
           is_auth: false,
         });
+        // Limpa o storage explicitamente se necessário
+        localStorage.removeItem("useLoginStore");
       },
     }),
     {
       name: "useLoginStore",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
