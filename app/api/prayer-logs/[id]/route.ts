@@ -3,17 +3,20 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     await prisma.prayerLog.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Erro ao deletar registro:", error);
     return NextResponse.json(
-      { error: "Erro ao deletar registro" },
+      { error: "Erro ao deletar registro", details: error.message },
       { status: 500 }
     );
   }
