@@ -10,7 +10,7 @@ export async function loginRequest(nome: string, senha: string) {
     return response.data;
   } catch (err) {
     const error = err as AxiosError<{ message: string }>;
-
+    
     if (error.response?.data?.message) {
       throw new Error(error.response.data.message);
     }

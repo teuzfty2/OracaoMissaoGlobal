@@ -7,18 +7,28 @@ const users = [
 ];
 
 export async function POST(request: Request) {
-  const { nome, senha } = await request.json();
+  try {
+    const { nome, senha } = await request.json();
 
-  const user = users.find(
-    (u) => u.nome === nome && u.senha === senha
-  );
+    const user = users.find(
+      (u) => u.nome === nome && u.senha === senha
+    );
 
-  if (!user) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "Usuário ou senha incorretos" },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      user: { nome: user.nome } 
+    });
+  } catch (error) {
     return NextResponse.json(
-      { message: "Credenciais inválidas" },
-      { status: 401 }
+      { success: false, message: "Erro interno no servidor" },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json({ nome: user.nome });
 }

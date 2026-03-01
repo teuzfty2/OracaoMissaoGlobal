@@ -1,10 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { loginRequest } from "./services"
+import { loginRequest } from "./services";
 
 export type User = {
   nome: string;
-  senha: string;
 };
 
 type LoginState = {
@@ -13,7 +12,7 @@ type LoginState = {
   is_loading: boolean;
   error: string | null;
 
-  login: (nome: string, senha: string) => Promise<void>;
+  login: (nome: string, senha: string) => Promise<boolean>;
   logout: () => void;
 };
 
@@ -31,16 +30,23 @@ export const useLogin = create<LoginState>()(
 
           const data = await loginRequest(nome, senha);
 
+          if (data.success) {
+            set({
+              user: data.user,
+              is_auth: true,
+              is_loading: false,
+            });
+            return true;
+          }
+          
+          set({ is_loading: false, error: "Falha na autenticação" });
+          return false;
+        } catch (err: any) {
           set({
-            user: { nome: data.nome, senha },
-            is_auth: true,
+            error: err.message || "Usuário ou senha inválidos",
             is_loading: false,
           });
-        } catch (err) {
-          set({
-            error: "Usuário ou senha inválidos",
-            is_loading: false,
-          });
+          return false;
         }
       },
 
