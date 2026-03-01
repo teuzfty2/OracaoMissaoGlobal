@@ -102,7 +102,7 @@ export default function Home() {
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="w-full max-w-md bg-white dark:bg-[#101829] rounded-2xl shadow-xl overflow-hidden backdrop-filter backdrop-blur-lg bg-opacity-95 dark:bg-opacity-90"
+          className="w-full max-w-md bg-white dark:bg-[#0a0f18] rounded-2xl shadow-xl overflow-hidden backdrop-filter backdrop-blur-lg bg-opacity-95 dark:bg-opacity-90"
         >
           <div className="bg-black dark:bg-white h-2 w-full"></div>
 
