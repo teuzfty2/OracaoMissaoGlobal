@@ -26,6 +26,12 @@ export default function PrayerCounter() {
     ? Math.min((displayHours / GOAL_HOURS) * 100, 100) 
     : 0;
 
+  const handleInputChange = (setter: (val: string) => void, value: string) => {
+    // Remove qualquer caractere que não seja número (impede o sinal de menos)
+    const cleanValue = value.replace(/[^0-9]/g, "");
+    setter(cleanValue);
+  };
+
   const handleAddPrayer = () => {
     const h = parseInt(inputHours) || 0;
     const m = parseInt(inputMinutes) || 0;
@@ -35,9 +41,13 @@ export default function PrayerCounter() {
       return;
     }
 
-    addTime(h, m, "adicionado");
+    // Garantia extra de que os valores são positivos
+    const safeH = Math.max(0, h);
+    const safeM = Math.max(0, m);
+
+    addTime(safeH, safeM, "adicionado");
     
-    const totalAddedMins = (h * 60) + m;
+    const totalAddedMins = (safeH * 60) + safeM;
     const convertedH = Math.floor(totalAddedMins / 60);
     const convertedM = totalAddedMins % 60;
 
@@ -75,17 +85,19 @@ export default function PrayerCounter() {
             <input
               type="number"
               inputMode="numeric"
+              min="0"
               placeholder="Horas"
               value={inputHours}
-              onChange={(e) => setInputHours(e.target.value)}
+              onChange={(e) => handleInputChange(setInputHours, e.target.value)}
               className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black/50 text-center outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
             />
             <input
               type="number"
               inputMode="numeric"
+              min="0"
               placeholder="Min"
               value={inputMinutes}
-              onChange={(e) => setInputMinutes(e.target.value)}
+              onChange={(e) => handleInputChange(setInputMinutes, e.target.value)}
               className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-black/50 text-center outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
             />
           </div>
