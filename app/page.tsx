@@ -113,7 +113,7 @@ export default function Home() {
               variants={containerVariants}
               className="space-y-6"
             >
-              <motion.div variants={itemVariants} className="text-center">
+              <motion.div variants={itemVariants} className="text-center select-none">
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Bem-vindo</h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2">Entre com suas credenciais</p>
               </motion.div>
