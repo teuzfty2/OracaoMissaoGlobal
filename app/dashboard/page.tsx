@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/store/useLogin";
 import toast from "react-hot-toast";
-import LoginSwitchTheme from "@/html/switch/switchTheme";
-import { IoExitOutline } from "react-icons/io5";
+import DashboardActions from "@/components/DashboardActions";
 
 export default function Dashboard() {
-  const { is_auth, user, logout } = useLogin();
+  const { is_auth, user } = useLogin();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -27,20 +26,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen p-8 flex flex-col items-center justify-center">
-      {/* Botões fixos no canto superior direito */}
-      <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
-        <LoginSwitchTheme />
-        <button 
-          onClick={() => {
-            logout();
-            router.push("/");
-          }}
-          className="w-10 h-10 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md active:scale-95"
-          title="Sair"
-        >
-          <IoExitOutline size={22} />
-        </button>
-      </div>
+      {/* Menu de ações expansível no canto direito */}
+      <DashboardActions />
 
       <div className="w-full max-w-4xl">
         <div className="mb-8">
