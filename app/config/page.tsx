@@ -111,7 +111,7 @@ export default function ConfigPage() {
           <div className="flex flex-col sm:flex-row gap-4 items-end">
             <div className="flex gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500">Horas</label>
+                <label className="text-xs font-medium text-gray-500 pr-2">Horas:</label>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -121,7 +121,7 @@ export default function ConfigPage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500">Minutos</label>
+                <label className="text-xs font-medium text-gray-500 pr-2">Minutos:</label>
                 <input
                   type="number"
                   inputMode="numeric"
