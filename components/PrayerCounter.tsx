@@ -59,7 +59,7 @@ export default function PrayerCounter() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center text-center space-y-8 w-full max-w-2xl mx-auto">
+    <div className="select-none flex flex-col items-center justify-center text-center space-y-8 w-full max-w-2xl mx-auto">
       <div className="space-y-2">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white">
           10.000 em Oração

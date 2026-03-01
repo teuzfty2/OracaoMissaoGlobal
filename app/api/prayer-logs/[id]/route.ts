@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
@@ -12,11 +11,11 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json({ success: true });
-  } catch (error: any) {
+    return Response.json({ success: true });
+  } catch (error) {
     console.error("Erro ao deletar registro:", error);
-    return NextResponse.json(
-      { error: "Erro ao deletar registro", details: error.message },
+    return Response.json(
+      { error: "Erro ao deletar" },
       { status: 500 }
     );
   }

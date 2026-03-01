@@ -6,8 +6,8 @@ import { useLogin } from "@/store/useLogin";
 import toast from "react-hot-toast";
 import DashboardActions from "@/components/DashboardActions";
 import PrayerCounter from "@/components/PrayerCounter";
-import Image from "next/image";
 import { usePrayer } from "@/store/usePrayer";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const { is_auth } = useLogin();
@@ -34,20 +34,23 @@ export default function Dashboard() {
   if (!mounted || !is_auth) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <motion.div
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="min-h-screen flex flex-col items-center justify-center p-6"
+    >
       <DashboardActions />
-      <Image
-        src="/ico.jpg"
-        alt="Símbolo Missão Global"
-        width={150}
-        height={150}
-        className="absolute top-8 left-8 rounded-full object-cover shadow-lg"
-      />
       <main className="w-full max-w-4xl">
-        <div className="relative bg-white dark:bg-[#0a0f18] p-8 md:p-16 rounded-[2.5rem] shadow-2xl border border-gray-200 dark:border-gray-800 backdrop-filter backdrop-blur-lg bg-opacity-95 dark:bg-opacity-50">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="relative bg-white dark:bg-[#0a0f18] p-8 md:p-16 rounded-[2.5rem] shadow-2xl border border-gray-200 dark:border-gray-800 backdrop-filter backdrop-blur-lg bg-opacity-95 dark:bg-opacity-50"
+        >
           <PrayerCounter />
-        </div>
+        </motion.div>
       </main>
-    </div>
+    </motion.div>
   );
 }

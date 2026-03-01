@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import DashboardActions from "@/components/DashboardActions";
 import { IoSettingsSharp } from "react-icons/io5";
 import { History, Edit3, Trash2, Check, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ConfigPage() {
   const { is_auth } = useLogin();
@@ -93,7 +94,7 @@ export default function ConfigPage() {
   if (!mounted || !is_auth) return null;
 
   return (
-    <div className="h-screen w-full overflow-hidden flex flex-col items-center p-4 md:p-8 pt-24">
+    <div className="select-none h-screen w-full overflow-hidden flex flex-col items-center p-4 md:p-8 pt-24">
       <DashboardActions />
 
       <div className="w-full max-w-4xl flex flex-col h-full space-y-6 pb-4">
@@ -107,29 +108,36 @@ export default function ConfigPage() {
             Configurações do Sistema
           </h1>
         </div>
-
         {/* Seção de Edição Fixa */}
-        <div className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 shrink-0">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 shrink-0"
+        >
           <div className="flex items-center gap-2 mb-4">
-            <Edit3 size={20} className="text-gray-600 dark:text-gray-400" />
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <Edit3
+              size={20}
+              className="text-gray-600 dark:text-gray-400 shrink-0"
+            />
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white break-words">
               Ajustar Tempo Total
             </h2>
           </div>
 
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 break-words">
             Use valores negativos para subtrair tempo (ex: -1 hora e -30
             minutos).
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-end">
-            <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-4 w-full">
+            <div className="flex gap-4 sm:gap-2 flex-wrap">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-gray-500 block pl-1">
                   Horas:
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   inputMode="numeric"
                   value={editHours}
                   onChange={(e) => setEditHours(e.target.value)}
@@ -141,8 +149,8 @@ export default function ConfigPage() {
                   Minutos:
                 </label>
                 <input
-                  type="number"
-                  inputMode="numeric"
+                  type="text"
+                   inputMode="numeric"
                   value={editMinutes}
                   onChange={(e) => setEditMinutes(e.target.value)}
                   className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-gray-800 dark:text-white"
@@ -151,15 +159,20 @@ export default function ConfigPage() {
             </div>
             <button
               onClick={handleEditTime}
-              className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:opacity-80 transition-all cursor-pointer"
+              className="w-full cursor-pointer sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:opacity-80 transition-all mt-4 sm:mt-0 self-start sm:self-center"
             >
               Aplicar Ajuste
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Seção de Histórico Flexível com Scroll Interno */}
-        <div className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col flex-1 min-h-0">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col flex-1 min-h-0"
+        >
           <div className="flex items-center justify-between mb-6 shrink-0">
             <div className="flex items-center gap-2">
               <History size={20} className="text-gray-600 dark:text-gray-400" />
@@ -224,7 +237,7 @@ export default function ConfigPage() {
               ))
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

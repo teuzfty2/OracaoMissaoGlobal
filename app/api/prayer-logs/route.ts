@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { PrayerLog } from "@prisma/client";
 
-function formatLog(log: any) {
+function formatLog(log: PrayerLog) {
   return {
     id: log.id,
     hours: Math.floor(log.minutes / 60),
