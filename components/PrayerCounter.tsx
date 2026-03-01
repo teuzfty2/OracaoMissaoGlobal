@@ -7,14 +7,24 @@ import { usePrayer } from "@/store/usePrayer";
 
 export default function PrayerCounter() {
   const GOAL_HOURS = 10000;
-  const { totalMinutes, addTime } = usePrayer();
+  const { history, addTime } = usePrayer();
   const [inputHours, setInputHours] = useState("");
   const [inputMinutes, setInputMinutes] = useState("");
+
+  // Cálculo reativo do tempo total baseado no histórico
+  const totalMinutes = history.reduce(
+    (acc, item) => acc + (item.hours * 60) + item.minutes,
+    0
+  );
 
   // Cálculo de exibição
   const displayHours = Math.floor(totalMinutes / 60);
   const displayMins = totalMinutes % 60;
-  const progressPercentage = Math.min((displayHours / GOAL_HOURS) * 100, 100);
+  
+  // Garante que o progresso seja 0 se não houver horas, evitando NaN
+  const progressPercentage = GOAL_HOURS > 0 
+    ? Math.min((displayHours / GOAL_HOURS) * 100, 100) 
+    : 0;
 
   const handleAddPrayer = () => {
     const h = parseInt(inputHours) || 0;
@@ -27,12 +37,11 @@ export default function PrayerCounter() {
 
     addTime(h, m, "adicionado");
     
-    // Calcula o tempo convertido para o Toast
     const totalAddedMins = (h * 60) + m;
     const convertedH = Math.floor(totalAddedMins / 60);
     const convertedM = totalAddedMins % 60;
 
-    const timeString = `${convertedH}h${convertedM > 0 ? ` ${convertedM}m` : ""}`;
+    const timeString = `${convertedH}h${convertedM !== 0 ? ` ${Math.abs(convertedM)}m` : ""}`;
     toast.success(`Adicionado: ${timeString}`);
     
     setInputHours("");
@@ -55,7 +64,7 @@ export default function PrayerCounter() {
           {displayHours.toLocaleString()}
         </span>
         <span className="text-2xl md:text-4xl font-bold text-gray-500 dark:text-gray-400 ml-4">
-          horas {displayMins > 0 && `e ${displayMins}m`}
+          horas {displayMins !== 0 && `e ${Math.abs(displayMins)}m`}
         </span>
       </div>
 
