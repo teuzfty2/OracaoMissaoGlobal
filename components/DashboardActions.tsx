@@ -18,19 +18,19 @@ export default function DashboardActions() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div 
-      className="fixed top-6 right-0 z-50 flex items-center"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-      onClick={toggleMenu}
-    >
+    /* Container pai agora não captura eventos (pointer-events-none) */
+    <div className="fixed top-6 right-0 z-50 flex items-center pointer-events-none">
       <motion.div
+        /* Apenas o menu em si captura eventos (pointer-events-auto) */
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        onClick={toggleMenu}
         initial={false}
         animate={{ 
           x: isOpen ? 0 : "calc(100% - 40px)",
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 p-2 rounded-l-2xl shadow-2xl cursor-pointer"
+        className="flex items-center bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 p-2 rounded-l-2xl shadow-2xl cursor-pointer pointer-events-auto"
       >
         {/* Ícone de Gatilho (Seta) */}
         <div className="w-10 h-10 flex items-center justify-center text-gray-600 dark:text-gray-300">
