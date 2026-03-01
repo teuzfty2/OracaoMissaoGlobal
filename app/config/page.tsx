@@ -88,18 +88,19 @@ export default function ConfigPage() {
   if (!mounted || !is_auth) return null;
 
   return (
-    <div className="min-h-screen p-8 flex flex-col items-center justify-start pt-24">
+    <div className="h-screen w-full overflow-hidden flex flex-col items-center p-4 md:p-8 pt-24">
       <DashboardActions />
 
-      <div className="w-full max-w-4xl space-y-8">
-        <div className="flex items-center gap-3">
+      <div className="w-full max-w-4xl flex flex-col h-full space-y-6 pb-4">
+        {/* Cabeçalho Fixo */}
+        <div className="flex items-center gap-3 shrink-0">
           <IoSettingsSharp className="text-gray-800 dark:text-white" size={28} />
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Configurações do Sistema</h1>
         </div>
         
-        {/* Seção de Edição */}
-        <div className="bg-white dark:bg-[#0a0f18] p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800">
-          <div className="flex items-center gap-2 mb-6">
+        {/* Seção de Edição Fixa */}
+        <div className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 shrink-0">
+          <div className="flex items-center gap-2 mb-4">
             <Edit3 size={20} className="text-gray-600 dark:text-gray-400" />
             <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Ajustar Tempo Total</h2>
           </div>
@@ -111,23 +112,23 @@ export default function ConfigPage() {
           <div className="flex flex-col sm:flex-row gap-4 items-end">
             <div className="flex gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 pr-2">Horas:</label>
+                <label className="text-xs font-medium text-gray-500 block pl-1">Horas:</label>
                 <input
                   type="number"
                   inputMode="numeric"
                   value={editHours}
                   onChange={(e) => setEditHours(e.target.value)}
-                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-gray-800 dark:text-white"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 pr-2">Minutos:</label>
+                <label className="text-xs font-medium text-gray-500 block pl-1">Minutos:</label>
                 <input
                   type="number"
                   inputMode="numeric"
                   value={editMinutes}
                   onChange={(e) => setEditMinutes(e.target.value)}
-                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-gray-800 dark:text-white"
                 />
               </div>
             </div>
@@ -140,8 +141,8 @@ export default function ConfigPage() {
           </div>
         </div>
 
-        {/* Seção de Histórico com Scroll Independente */}
-        <div className="bg-white dark:bg-[#0a0f18] p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col max-h-[600px]">
+        {/* Seção de Histórico Flexível com Scroll Interno */}
+        <div className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col flex-1 min-h-0">
           <div className="flex items-center justify-between mb-6 shrink-0">
             <div className="flex items-center gap-2">
               <History size={20} className="text-gray-600 dark:text-gray-400" />
@@ -155,9 +156,12 @@ export default function ConfigPage() {
             </button>
           </div>
 
-          <div className="overflow-y-auto pr-2 space-y-3 custom-scrollbar scroll-smooth">
+          {/* Lista com Scroll Independente */}
+          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar scroll-smooth min-h-0">
             {history.length === 0 ? (
-              <p className="text-center py-12 text-gray-500 italic">Nenhum registro encontrado.</p>
+              <div className="h-full flex items-center justify-center">
+                <p className="text-gray-500 italic">Nenhum registro encontrado.</p>
+              </div>
             ) : (
               history.map((item) => (
                 <div 
