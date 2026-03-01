@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { api } from "@/lib/api";
 
 export type PrayerHistoryItem = {
   id: string;
@@ -10,57 +10,50 @@ export type PrayerHistoryItem = {
 };
 
 type PrayerState = {
-  totalMinutes: number;
   history: PrayerHistoryItem[];
-  addTime: (hours: number, minutes: number, type?: "adicionado" | "editado") => void;
-  removeHistoryItem: (id: string) => void;
-  clearHistory: () => void;
+  totalMinutes: () => number;
+  setHistoryFromDatabase: (logs: PrayerHistoryItem[]) => void;
+  loadFromDatabase: () => Promise<void>;
+  addTime: (hours: number, minutes: number) => Promise<void>;
+  removeHistoryItem: (id: string) => Promise<void>;
 };
 
-export const usePrayer = create<PrayerState>()(
-  persist(
-    (set) => ({
-      totalMinutes: 0,
-      history: [],
+export const usePrayer = create<PrayerState>((set, get) => ({
+  history: [],
 
-      addTime: (hours, minutes, type = "adicionado") => {
-        const addedMinutes = (hours * 60) + minutes;
-        
-        set((state) => {
-          const newItem: PrayerHistoryItem = {
-            id: Math.random().toString(36).substring(2, 9),
-            hours,
-            minutes,
-            type,
-            timestamp: Date.now(),
-          };
+  totalMinutes: () =>
+    get().history.reduce(
+      (acc, item) => acc + item.hours * 60 + item.minutes,
+      0
+    ),
 
-          return {
-            totalMinutes: state.totalMinutes + addedMinutes,
-            history: [newItem, ...state.history].slice(0, 50),
-          };
-        });
-      },
+  setHistoryFromDatabase: (logs) => {
+    set({ history: logs });
+  },
 
-      removeHistoryItem: (id: string) => {
-        set((state) => {
-          const itemToRemove = state.history.find((item) => item.id === id);
-          if (!itemToRemove) return state;
+  loadFromDatabase: async () => {
+    const response = await api.get("/prayer-logs");
+    set({ history: response.data });
+  },
 
-          const minutesToRemove = (itemToRemove.hours * 60) + itemToRemove.minutes;
+  addTime: async (hours, minutes) => {
+    const response = await api.post("/prayer-logs", {
+      hours,
+      minutes,
+    });
 
-          return {
-            totalMinutes: state.totalMinutes - minutesToRemove,
-            history: state.history.filter((item) => item.id !== id),
-          };
-        });
-      },
+    const newLog = response.data;
 
-      clearHistory: () => set({ totalMinutes: 0, history: [] }),
-    }),
-    {
-      name: "prayer-store",
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+    set((state) => ({
+      history: [newLog, ...state.history],
+    }));
+  },
+
+  removeHistoryItem: async (id) => {
+    await api.delete(`/prayer-logs/${id}`);
+
+    set((state) => ({
+      history: state.history.filter((item) => item.id !== id),
+    }));
+  },
+}));

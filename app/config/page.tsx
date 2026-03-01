@@ -46,43 +46,48 @@ export default function ConfigPage() {
 
   const handleDeleteItem = (id: string, hours: number, minutes: number) => {
     removeHistoryItem(id);
-    toast.success(`Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`);
+    toast.success(
+      `Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`,
+    );
   };
 
   const confirmClearAll = () => {
-    toast((t) => (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-medium text-gray-800">
-          Tem certeza que deseja <b>zerar tudo</b>?
-        </p>
-        <div className="flex gap-2 justify-end">
-          <button
-            onClick={() => toast.dismiss(t.id)}
-            className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors flex items-center gap-1"
-          >
-            <X size={14} /> Cancelar
-          </button>
-          <button
-            onClick={() => {
-              clearHistory();
-              toast.dismiss(t.id);
-              toast.success("Sistema resetado com sucesso");
-            }}
-            className="px-3 py-1.5 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-1 font-bold"
-          >
-            <Check size={14} /> Confirmar
-          </button>
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-3">
+          <p className="text-sm font-medium text-gray-800">
+            Tem certeza que deseja <b>zerar tudo</b>?
+          </p>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors flex items-center gap-1"
+            >
+              <X size={14} /> Cancelar
+            </button>
+            <button
+              onClick={() => {
+                clearHistory();
+                toast.dismiss(t.id);
+                toast.success("Sistema resetado com sucesso");
+              }}
+              className="px-3 py-1.5 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-1 font-bold"
+            >
+              <Check size={14} /> Confirmar
+            </button>
+          </div>
         </div>
-      </div>
-    ), {
-      duration: 5000,
-      position: "top-center",
-      style: {
-        minWidth: "250px",
-        padding: "16px",
-        borderRadius: "12px",
-      }
-    });
+      ),
+      {
+        duration: 5000,
+        position: "top-center",
+        style: {
+          minWidth: "250px",
+          padding: "16px",
+          borderRadius: "12px",
+        },
+      },
+    );
   };
 
   if (!mounted || !is_auth) return null;
@@ -94,25 +99,35 @@ export default function ConfigPage() {
       <div className="w-full max-w-4xl flex flex-col h-full space-y-6 pb-4">
         {/* Cabeçalho Fixo */}
         <div className="flex items-center gap-3 shrink-0">
-          <IoSettingsSharp className="text-gray-800 dark:text-white" size={28} />
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Configurações do Sistema</h1>
+          <IoSettingsSharp
+            className="text-gray-800 dark:text-white"
+            size={28}
+          />
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Configurações do Sistema
+          </h1>
         </div>
-        
+
         {/* Seção de Edição Fixa */}
         <div className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 shrink-0">
           <div className="flex items-center gap-2 mb-4">
             <Edit3 size={20} className="text-gray-600 dark:text-gray-400" />
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Ajustar Tempo Total</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+              Ajustar Tempo Total
+            </h2>
           </div>
-          
+
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-            Use valores negativos para subtrair tempo (ex: -1 hora e -30 minutos).
+            Use valores negativos para subtrair tempo (ex: -1 hora e -30
+            minutos).
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-end">
             <div className="flex gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 block pl-1">Horas:</label>
+                <label className="text-xs font-medium text-gray-500 block pl-1">
+                  Horas:
+                </label>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -122,7 +137,9 @@ export default function ConfigPage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 block pl-1">Minutos:</label>
+                <label className="text-xs font-medium text-gray-500 block pl-1">
+                  Minutos:
+                </label>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -146,9 +163,11 @@ export default function ConfigPage() {
           <div className="flex items-center justify-between mb-6 shrink-0">
             <div className="flex items-center gap-2">
               <History size={20} className="text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Últimos Registros</h2>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+                Últimos Registros
+              </h2>
             </div>
-            <button 
+            <button
               onClick={confirmClearAll}
               className="text-red-500 hover:text-red-600 flex items-center gap-1 text-sm font-medium cursor-pointer transition-colors"
             >
@@ -160,41 +179,50 @@ export default function ConfigPage() {
           <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar scroll-smooth min-h-0">
             {history.length === 0 ? (
               <div className="h-full flex items-center justify-center">
-                <p className="text-gray-500 italic">Nenhum registro encontrado.</p>
+                <p className="text-gray-500 italic">
+                  Nenhum registro encontrado.
+                </p>
               </div>
             ) : (
               history.map((item) => (
-  <div 
-    key={item.id} 
-    className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all"
-  >
-    <div className="flex flex-col">
-      <span className="font-medium text-gray-800 dark:text-white">
-        {item.hours}h {item.minutes !== 0 ? `e ${item.minutes}` : ""}  {/* Mostra o sinal real */}
-      </span>
-      <span className="text-xs text-gray-500">
-        {new Date(item.timestamp).toLocaleString('pt-BR')}
-      </span>
-    </div>
-    
-    <div className="flex items-center gap-4">
-      <span className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
-        item.type === 'adicionado' 
-          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-          : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-      }`}>
-        {item.type}
-      </span>
-      <button
-        onClick={() => handleDeleteItem(item.id, item.hours, item.minutes)}
-        className="p-2 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
-        title="Excluir registro"
-      >
-        <Trash2 size={18} />
-      </button>
-    </div>
-  </div>
-)))}
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium text-gray-800 dark:text-white">
+                      {item.hours}h{" "}
+                      {item.minutes !== 0 ? `e ${item.minutes}` : ""}{" "}
+                      {/* Mostra o sinal real */}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(item.timestamp).toLocaleString("pt-BR")}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <span
+                      className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                        item.type === "adicionado"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      }`}
+                    >
+                      {item.type}
+                    </span>
+                    <button
+                      onClick={() =>
+                        handleDeleteItem(item.id, item.hours, item.minutes)
+                      }
+                      className="p-2 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
+                      title="Excluir registro"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
