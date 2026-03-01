@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/client"
 }
 
 datasource db {
@@ -9,8 +10,8 @@ datasource db {
 
 model PrayerLog {
   id        String   @id @default(cuid())
-  userId    String
   minutes   Int
-  type      String   // "adicionado" ou "editado"
+  type      String   @default("adicionado")
+  userId    String
   createdAt DateTime @default(now())
 }
