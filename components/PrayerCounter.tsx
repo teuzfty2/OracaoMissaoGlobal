@@ -25,9 +25,17 @@ export default function PrayerCounter() {
     }
 
     const addedMinutes = (h * 60) + m;
+    
+    // Calcula o tempo convertido para o Toast
+    const convertedH = Math.floor(addedMinutes / 60);
+    const convertedM = addedMinutes % 60;
+
     setTotalMinutes(prev => prev + addedMinutes);
     
-    toast.success(`Adicionado: ${h}h ${m}m`);
+    // Exibe o toast com o tempo já formatado corretamente
+    const timeString = `${convertedH}h${convertedM > 0 ? ` ${convertedM}m` : ""}`;
+    toast.success(`Adicionado: ${timeString}`);
+    
     setInputHours("");
     setInputMinutes("");
   };
