@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { usePrayer } from "@/store/usePrayer";
 
 export default function PrayerCounter() {
   const GOAL_HOURS = 10000;
-  const [totalMinutes, setTotalMinutes] = useState(0);
+  const { totalMinutes, addTime } = usePrayer();
   const [inputHours, setInputHours] = useState("");
   const [inputMinutes, setInputMinutes] = useState("");
 
@@ -24,15 +25,13 @@ export default function PrayerCounter() {
       return;
     }
 
-    const addedMinutes = (h * 60) + m;
+    addTime(h, m, "adicionado");
     
     // Calcula o tempo convertido para o Toast
-    const convertedH = Math.floor(addedMinutes / 60);
-    const convertedM = addedMinutes % 60;
+    const totalAddedMins = (h * 60) + m;
+    const convertedH = Math.floor(totalAddedMins / 60);
+    const convertedM = totalAddedMins % 60;
 
-    setTotalMinutes(prev => prev + addedMinutes);
-    
-    // Exibe o toast com o tempo já formatado corretamente
     const timeString = `${convertedH}h${convertedM > 0 ? ` ${convertedM}m` : ""}`;
     toast.success(`Adicionado: ${timeString}`);
     
@@ -66,6 +65,7 @@ export default function PrayerCounter() {
           <div className="flex gap-2">
             <input
               type="number"
+              inputMode="numeric"
               placeholder="Horas"
               value={inputHours}
               onChange={(e) => setInputHours(e.target.value)}
@@ -73,6 +73,7 @@ export default function PrayerCounter() {
             />
             <input
               type="number"
+              inputMode="numeric"
               placeholder="Min"
               value={inputMinutes}
               onChange={(e) => setInputMinutes(e.target.value)}
