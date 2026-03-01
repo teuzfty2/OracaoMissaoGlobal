@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@prisma/client':
-        specifier: ^6.2.1
+        specifier: 6.2.1
         version: 6.2.1(prisma@6.2.1)
       '@supabase/supabase-js':
         specifier: ^2.98.0
@@ -39,7 +39,7 @@ importers:
         specifier: 16.1.6
         version: 16.1.6(@babel/core@7.29.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       prisma:
-        specifier: ^6.2.1
+        specifier: 6.2.1
         version: 6.2.1
       radix-ui:
         specifier: ^1.4.3
