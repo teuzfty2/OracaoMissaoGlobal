@@ -157,7 +157,7 @@ export default function Home() {
                         onKeyDown={formProgress}
                         className="w-full p-3 outline-none bg-transparent text-gray-800 dark:text-white"
                       />
-                      <button type="button" onClick={() => setPasswordVisible(!isPasswordVisible)} className="pr-4 text-gray-500">
+                      <button type="button" onClick={() => setPasswordVisible(!isPasswordVisible)} className="pr-4 text-gray-500 hover:scale-105 hover:text-blue-500 transform duration-300">
                         {isPasswordVisible ? <VscEyeClosed size={20} /> : <VscEye size={20} />}
                       </button>
                     </div>
