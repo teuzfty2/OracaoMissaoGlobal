@@ -142,7 +142,7 @@ export default function Home() {
 
                 <motion.div variants={itemVariants}>
                   <div className={`relative border dark:border-gray-700 rounded-lg duration-300 ${passwordFocused || form.senha ? "border-black dark:border-white" : "border-gray-300"}`}>
-                    <label className={`absolute duration-300 ${passwordFocused || form.senha ? "text-xs -translate-y-2.5 translate-x-2 bg-white dark:bg-gray-900 px-1" : "text-sm translate-y-3 translate-x-10 text-gray-500"}`}>
+                    <label className={`absolute duration-300 ${passwordFocused || form.senha ? "text-xs -translate-y-2.5 translate-x-2 bg-white dark:bg-[#0a0f18] px-1" : "text-sm translate-y-3 translate-x-10 text-gray-500"}`}>
                       Senha
                     </label>
                     <div className="flex items-center">
