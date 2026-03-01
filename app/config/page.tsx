@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import DashboardActions from "@/components/DashboardActions";
 import { IoSettingsSharp } from "react-icons/io5";
 import { History, Edit3, Trash2, Check, X } from "lucide-react";
-// Importação direta para evitar erro de exportação no Next.js
 import { FixedSizeList } from "react-window";
 
 export default function ConfigPage() {
