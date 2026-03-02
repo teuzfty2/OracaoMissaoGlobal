@@ -4,10 +4,10 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = "postgresql://postgres:Matchola8228..@db.nerfryuccuxfucrjckdp.supabase.co:5432/postgres"
-  directUrl = "postgresql://postgres:Matchola8228..@db.nerfryuccuxfucrjckdp.supabase.co:5432/postgres"
+  url       = "postgresql://postgres.pzdcsaayccxbsrkivimf:MatheusChupadorDeIpca@aws-0-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
+  directUrl = "postgresql://postgres.pzdcsaayccxbsrkivimf:MatheusChupadorDeIpca@aws-0-us-west-2.pooler.supabase.com:5432/postgres"
 }
-
+//MatheusChupadorDeIpca
 model PrayerLog {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   minutes   Int
