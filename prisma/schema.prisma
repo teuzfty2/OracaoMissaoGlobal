@@ -4,10 +4,14 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = "postgresql://postgres.pzdcsaayccxbsrkivimf:MatheusChupadorDeIpca@aws-0-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-  directUrl = "postgresql://postgres.pzdcsaayccxbsrkivimf:MatheusChupadorDeIpca@aws-0-us-west-2.pooler.supabase.com:5432/postgres"
+  
+  // URL principal (exatamente a que o painel do Supabase te deu na aba Prisma)
+  url       = "postgresql://postgres.pzdcsaayccxbsrkivimf:Matchola8228..@aws-0-us-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+  
+  // URL direta (exatamente a que o painel do Supabase te deu para o directUrl)
+  directUrl = "postgresql://postgres.nerfryuccuxfucrjckdp:Matchola8228..@aws-0-us-west-2.pooler.supabase.com:5432/postgres"
 }
-//MatheusChupadorDeIpca
+
 model PrayerLog {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   minutes   Int
