@@ -1,95 +1,78 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
-import { ObjectId, WithId, Document } from "mongodb";
+import { WithId, Document } from "mongodb";
 
 interface PrayerLog extends WithId<Document> {
-    minutes: number;
-    type: string;
-    createdAt: Date;
+  minutes: number;
+  type: string;
+  createdAt: Date;
+}
+
+function formatLog(log: PrayerLog) {
+  return {
+    id: log._id.toHexString(),
+    hours: Math.floor(log.minutes / 60),
+    minutes: log.minutes % 60,
+    type: log.type,
+    timestamp: new Date(log.createdAt).getTime(),
+  };
+}
+
+// Para esta rota, não usamos params porque ela não é dinâmica ([id])
+export async function GET() {
+  try {
+    const client = await clientPromise;
+    const db = client.db();
+    const logs = await db
+      .collection<PrayerLog>("prayer_logs")
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+      
+    return NextResponse.json(logs.map(formatLog));
+  } catch (error: any) {
+    console.error("Erro GET logs:", error);
+    return NextResponse.json({ error: "Erro ao buscar registros", details: error.message }, { status: 500 });
   }
-  
-  function formatLog(log: PrayerLog) {
-    return {
-      id: log._id.toHexString(),
-      hours: Math.floor(log.minutes / 60),
-      minutes: log.minutes % 60,
-      type: log.type,
-      timestamp: new Date(log.createdAt).getTime(),
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const client = await clientPromise;
+    const db = client.db();
+    const body = await req.json();
+    const { hours, minutes, type } = body;
+    
+    const totalMinutes = (parseInt(hours) || 0) * 60 + (parseInt(minutes) || 0);
+
+    const newLogData = {
+      minutes: totalMinutes,
+      type: type || "adicionado",
+      createdAt: new Date(),
     };
+
+    const result = await db.collection("prayer_logs").insertOne(newLogData);
+    
+    const newLog = {
+      ...newLogData,
+      _id: result.insertedId,
+    } as PrayerLog;
+
+    return NextResponse.json(formatLog(newLog));
+  } catch (error: any) {
+    console.error("Erro POST logs:", error);
+    return NextResponse.json({ error: "Erro ao criar registro", details: error.message }, { status: 500 });
   }
-
-export async function GET(
-    req: Request,
-    { params }: { params: { id: string } }
-) {
-    try {
-        const client = await clientPromise;
-        const db = client.db();
-        const { id } = params;
-
-        const log = await db
-            .collection<PrayerLog>("prayer_logs")
-            .findOne({ _id: new ObjectId(id) });
-
-        if (!log) {
-            return NextResponse.json({ error: "Registro não encontrado" }, { status: 404 });
-        }
-
-        return NextResponse.json(formatLog(log));
-    } catch (error: any) {
-        console.error("Erro GET log by id:", error);
-        return NextResponse.json({ error: "Erro ao buscar registro", details: error.message }, { status: 500 });
-    }
 }
 
-export async function PUT(
-    req: Request,
-    { params }: { params: { id: string } }
-) {
-    try {
-        const client = await clientPromise;
-        const db = client.db();
-        const { id } = params;
-        const body = await req.json();
-        const { hours, minutes, type } = body;
-
-        const totalMinutes = (parseInt(hours) || 0) * 60 + (parseInt(minutes) || 0);
-
-        const result = await db
-            .collection("prayer_logs")
-            .updateOne({ _id: new ObjectId(id) }, { $set: { minutes: totalMinutes, type } });
-
-        if (result.matchedCount === 0) {
-            return NextResponse.json({ error: "Registro não encontrado" }, { status: 404 });
-        }
-
-        return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error("Erro PUT log:", error);
-        return NextResponse.json({ error: "Erro ao atualizar registro", details: error.message }, { status: 500 });
-    }
-}
-
-export async function DELETE(
-    req: Request,
-    { params }: { params: { id: string } }
-) {
-    try {
-        const client = await clientPromise;
-        const db = client.db();
-        const { id } = params;
-
-        const result = await db
-            .collection("prayer_logs")
-            .deleteOne({ _id: new ObjectId(id) });
-
-        if (result.deletedCount === 0) {
-            return NextResponse.json({ error: "Registro não encontrado" }, { status: 404 });
-        }
-
-        return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error("Erro ao deletar registro:", error);
-        return NextResponse.json({ error: "Erro ao deletar", details: error.message }, { status: 500 });
-    }
+export async function DELETE() {
+  try {
+    const client = await clientPromise;
+    const db = client.db();
+    await db.collection("prayer_logs").deleteMany({});
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Erro DELETE all logs:", error);
+    return NextResponse.json({ error: "Erro ao limpar registros", details: error.message }, { status: 500 });
+  }
 }

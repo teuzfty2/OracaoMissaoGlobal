@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { WithId, Document } from "mongodb";
 
@@ -18,6 +18,7 @@ function formatLog(log: PrayerLog) {
   };
 }
 
+// Para esta rota, não usamos params porque ela não é dinâmica ([id])
 export async function GET() {
   try {
     const client = await clientPromise;
@@ -35,7 +36,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const client = await clientPromise;
     const db = client.db();
@@ -56,7 +57,6 @@ export async function POST(req: Request) {
       ...newLogData,
       _id: result.insertedId,
     } as PrayerLog;
-
 
     return NextResponse.json(formatLog(newLog));
   } catch (error: any) {
