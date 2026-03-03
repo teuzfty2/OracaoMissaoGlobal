@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { PrayerLog } from "@prisma/client";
+import clientPromise from "@/lib/mongodb";
+import { WithId, Document } from "mongodb";
+
+interface PrayerLog extends WithId<Document> {
+  minutes: number;
+  type: string;
+  createdAt: Date;
+}
 
 function formatLog(log: PrayerLog) {
   return {
-    id: log.id,
+    id: log._id.toHexString(),
     hours: Math.floor(log.minutes / 60),
     minutes: log.minutes % 60,
     type: log.type,
@@ -14,9 +20,14 @@ function formatLog(log: PrayerLog) {
 
 export async function GET() {
   try {
-    const logs = await prisma.prayerLog.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const client = await clientPromise;
+    const db = client.db();
+    const logs = await db
+      .collection<PrayerLog>("prayer_logs")
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+      
     return NextResponse.json(logs.map(formatLog));
   } catch (error: any) {
     console.error("Erro GET logs:", error);
@@ -26,17 +37,26 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const client = await clientPromise;
+    const db = client.db();
     const body = await req.json();
     const { hours, minutes, type } = body;
     
     const totalMinutes = (parseInt(hours) || 0) * 60 + (parseInt(minutes) || 0);
 
-    const newLog = await prisma.prayerLog.create({
-      data: {
-        minutes: totalMinutes,
-        type: type || "adicionado",
-      },
-    });
+    const newLogData = {
+      minutes: totalMinutes,
+      type: type || "adicionado",
+      createdAt: new Date(),
+    };
+
+    const result = await db.collection("prayer_logs").insertOne(newLogData);
+    
+    const newLog = {
+      ...newLogData,
+      _id: result.insertedId,
+    } as PrayerLog;
+
 
     return NextResponse.json(formatLog(newLog));
   } catch (error: any) {
@@ -47,7 +67,9 @@ export async function POST(req: Request) {
 
 export async function DELETE() {
   try {
-    await prisma.prayerLog.deleteMany({});
+    const client = await clientPromise;
+    const db = client.db();
+    await db.collection("prayer_logs").deleteMany({});
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Erro DELETE all logs:", error);
