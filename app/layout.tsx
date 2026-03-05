@@ -1,7 +1,6 @@
 "use client";
 
 import "./globals.css";
-import { customizeSystem } from "@/store/customizeSystem";
 import { Toaster } from "react-hot-toast";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
@@ -10,10 +9,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { theme } = customizeSystem();
   
   return (
-    <html lang="pt_br" className={theme ? "dark" : ""}>
+    <html lang="pt_br">
       <head>
         <link rel="icon" type="image/jpg" href="/ico.jpg" />
         <title>Contagem de Oração</title>

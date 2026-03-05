@@ -44,6 +44,17 @@ export default function PrayerCounter() {
     setInputMinutes("");
   };
 
+  function calcularDiaProjeto(dataInicio: string) {
+    const inicio = new Date(dataInicio + "T00:00:00")
+    const hoje = new Date()
+
+    const diffMs = hoje.setHours(0, 0, 0, 0) - inicio.getTime()
+
+    return Math.floor(diffMs / 86400000) + 1
+  }
+
+  const diaProjeto = calcularDiaProjeto("2026-03-01")
+
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col items-center py-2 md:py-4 space-y-6 md:space-y-8 select-none">
       
@@ -53,7 +64,7 @@ export default function PrayerCounter() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-1"
       >
-        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white uppercase">
+        <h1 className="text-7xl md:text-6xl font-black tracking-tighter text-white uppercase">
           10.000 <span className="text-white/20">Horas</span>
         </h1>
         <p className="text-sm md:text-base font-bold text-blue-400/60 tracking-[0.4em] uppercase">
@@ -77,7 +88,7 @@ export default function PrayerCounter() {
                 cy="260"
                 r={radius}
                 className="stroke-white/5 fill-none"
-                strokeWidth="18"
+                strokeWidth="20"
               />
               {/* Círculo de Progresso */}
               <motion.circle
@@ -144,12 +155,12 @@ export default function PrayerCounter() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Restante</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Horas Restante</p>
                   <p className="text-2xl font-black text-white">{(GOAL_HOURS - displayHours).toLocaleString()}h</p>
                 </div>
                 <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
-                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Meta Final</p>
-                  <p className="text-2xl font-black text-white">{GOAL_HOURS.toLocaleString()}h</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Dias desde o inicio</p>
+                  <p className="text-2xl font-black text-white">{diaProjeto} Dias</p>
                 </div>
               </div>
             </div>
