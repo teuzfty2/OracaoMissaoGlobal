@@ -61,7 +61,7 @@ export default function ConfigPage() {
   const handleDeleteItem = (id: string, hours: number, minutes: number) => {
     removeHistoryItem(id);
     toast.success(
-      `Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`
+      `Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`,
     );
   };
 
@@ -93,7 +93,7 @@ export default function ConfigPage() {
           </div>
         </div>
       ),
-      { duration: 5000, position: "top-center" }
+      { duration: 5000, position: "top-center" },
     );
   };
 
@@ -150,7 +150,25 @@ export default function ConfigPage() {
                     inputMode="numeric"
                     placeholder="- Minutos"
                     value={editMinutes}
-                    onChange={(e) => setEditMinutes(e.target.value)}
+                    onChange={(e) => {
+                      let value = e.target.value;
+
+                      const number = Number(value);
+
+                      if (number > 59) {
+                        toast("Máximo permitido é 59 minutos");
+                        setEditMinutes("59");
+                        return;
+                      }
+
+                      if (number < -59) {
+                        toast("Máximo permitido é -59 minutos");
+                        setEditMinutes("-59");
+                        return;
+                      }
+
+                      setEditMinutes(value);
+                    }}
                     className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-center text-xl font-black outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -217,11 +235,7 @@ export default function ConfigPage() {
 
                       <button
                         onClick={() =>
-                          handleDeleteItem(
-                            item.id,
-                            item.hours,
-                            item.minutes
-                          )
+                          handleDeleteItem(item.id, item.hours, item.minutes)
                         }
                         className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-2xl"
                       >

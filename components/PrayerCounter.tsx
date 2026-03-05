@@ -17,6 +17,10 @@ export default function PrayerCounter() {
     0,
   );
 
+  const goalMinutes = GOAL_HOURS * 60;
+  const remainingMinutes = goalMinutes - totalMinutes;
+  const remainingHours = remainingMinutes / 60;
+
   const displayHours = Math.floor(totalMinutes / 60);
   const displayMins = totalMinutes % 60;
 
@@ -63,10 +67,10 @@ export default function PrayerCounter() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-1"
       >
-        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white uppercase">
+        <h1 className="text-4xl md:text-8xl font-black tracking-tighter text-white uppercase">
           10.000 <span className="text-white/20">Horas</span>
         </h1>
-        <p className="text-sm md:text-base font-bold text-blue-400/60 tracking-[0.4em] uppercase">
+        <p className="text-sm md:text-base font-bold text-blue-400 tracking-[0.4em] uppercase">
           de Orações
         </p>
       </motion.div>
@@ -153,15 +157,26 @@ export default function PrayerCounter() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
+                <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
                   <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">
                     Restante
                   </p>
                   <p className="text-2xl font-black text-white">
-                    {(GOAL_HOURS - displayHours - Math.abs(displayMins)).toLocaleString()} horas
+                    {displayMins === 0
+                      ? Math.floor(
+                          (GOAL_HOURS * 60 - totalMinutes) / 60,
+                        ).toLocaleString("pt-BR")
+                      : ((GOAL_HOURS * 60 - totalMinutes) / 60).toLocaleString(
+                          "pt-BR",
+                          {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          },
+                        )}{" "}
+                    horas
                   </p>
                 </div>
-                <div className="p-5 bg-black/40 rounded-3xl border border-white/5">
+                <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
                   <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">
                     Dias desde o inicio
                   </p>
@@ -210,9 +225,21 @@ export default function PrayerCounter() {
                     inputMode="numeric"
                     placeholder="00"
                     value={inputMinutes}
-                    onChange={(e) =>
-                      setInputMinutes(e.target.value.replace(/\D/g, ""))
-                    }
+                    onChange={(e) => {
+                      let value = e.target.value.replace(/\D/g, "");
+
+                      if (value.length > 2) return;
+
+                      const number = Number(value);
+
+                      if (number > 59) {
+                        toast.error("Máximo permitido é 59 minutos", { id: "minutes-limit" });
+                        setInputMinutes("59");
+                        return;
+                      }
+
+                      setInputMinutes(value);
+                    }}
                     className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-center text-xl font-black outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>

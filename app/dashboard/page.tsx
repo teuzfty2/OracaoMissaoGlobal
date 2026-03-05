@@ -33,7 +33,7 @@ export default function Dashboard() {
   if (!mounted || !is_auth) return null;
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-start pt-20 pb-12 px-6 overflow-x-hidden">
+    <div className="min-h-screen w-full flex flex-col items-center justify-start pt-10 pb-12 px-6 overflow-x-hidden">
       <DashboardActions />
       
       <motion.main 

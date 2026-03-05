@@ -9,10 +9,7 @@ import toast from "react-hot-toast";
 import { useLogin } from "@/store/useLogin";
 
 // Hooks
-import {
-  containerVariants,
-  itemVariants,
-} from "@/store/animations/variantes";
+import { containerVariants, itemVariants } from "@/store/animations/variantes";
 
 // Icons
 import { FaUser, FaLock } from "react-icons/fa";
@@ -53,20 +50,24 @@ export default function Home() {
     }
   };
 
-  const formProgress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const formProgress = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    action?: () => void,
+    nextRef?: React.RefObject<HTMLInputElement>,
+  ) => {
     if (e.key !== "Enter") return;
-    if (form.login && form.senha) {
-      handleLogin();
-    } else if (form.login) {
-      inputRef.senha.current?.focus();
+
+    if (action) {
+      action();
+    } else if (nextRef?.current) {
+      nextRef.current.focus();
     }
   };
 
   return (
     <div className="min-h-screen w-full select-none flex flex-col items-center justify-center p-6">
-      
       {/* Título Monumental */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-1 mb-12"
@@ -103,7 +104,9 @@ export default function Home() {
                     type="text"
                     ref={inputRef.login}
                     value={form.login}
-                    onChange={(e) => setForm({ ...form, login: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, login: e.target.value })
+                    }
                     onKeyDown={formProgress}
                     placeholder="Seu usuário"
                     className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-lg font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-white/10"
@@ -121,17 +124,23 @@ export default function Home() {
                     ref={inputRef.senha}
                     type={isPasswordVisible ? "text" : "password"}
                     value={form.senha}
-                    onChange={(e) => setForm({ ...form, senha: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, senha: e.target.value })
+                    }
                     onKeyDown={formProgress}
                     placeholder="••••••••"
                     className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-lg font-bold outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-white/10"
                   />
-                  <button 
-                    type="button" 
-                    onClick={() => setPasswordVisible(!isPasswordVisible)} 
+                  <button
+                    type="button"
+                    onClick={() => setPasswordVisible(!isPasswordVisible)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-colors cursor-pointer"
                   >
-                    {isPasswordVisible ? <VscEyeClosed size={22} /> : <VscEye size={22} />}
+                    {isPasswordVisible ? (
+                      <VscEyeClosed size={22} />
+                    ) : (
+                      <VscEye size={22} />
+                    )}
                   </button>
                 </div>
               </motion.div>
