@@ -17,9 +17,9 @@ export default function PrayerCounter() {
     0,
   );
 
-  const goalMinutes = GOAL_HOURS * 60;
-  const remainingMinutes = goalMinutes - totalMinutes;
-  const remainingHours = remainingMinutes / 60;
+  const remainingTotalMinutes = GOAL_HOURS * 60 - totalMinutes;
+  const remainingHrs = Math.floor(remainingTotalMinutes / 60);
+  const remainingMins = remainingTotalMinutes % 60;
 
   const displayHours = Math.floor(totalMinutes / 60);
   const displayMins = totalMinutes % 60;
@@ -162,18 +162,8 @@ export default function PrayerCounter() {
                     Restante
                   </p>
                   <p className="text-2xl font-black text-white">
-                    {displayMins === 0
-                      ? Math.floor(
-                          (GOAL_HOURS * 60 - totalMinutes) / 60,
-                        ).toLocaleString("pt-BR")
-                      : ((GOAL_HOURS * 60 - totalMinutes) / 60).toLocaleString(
-                          "pt-BR",
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          },
-                        )}{" "}
-                    horas
+                    {remainingHrs.toLocaleString("pt-BR")}:
+                    {remainingMins.toString().padStart(2, "0")} horas
                   </p>
                 </div>
                 <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
@@ -233,7 +223,9 @@ export default function PrayerCounter() {
                       const number = Number(value);
 
                       if (number > 59) {
-                        toast.error("Máximo permitido é 59 minutos", { id: "minutes-limit" });
+                        toast.error("Máximo permitido é 59 minutos", {
+                          id: "minutes-limit",
+                        });
                         setInputMinutes("59");
                         return;
                       }
