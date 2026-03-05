@@ -220,7 +220,7 @@ export default function PrayerCounter() {
 
               <button
                 onClick={handleAddPrayer}
-                className="w-full py-5 bg-white text-black font-black rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 cursor-pointer uppercase tracking-widest text-xs"
+                className="w-full py-5 lg:py-4 bg-white text-black font-black rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 cursor-pointer uppercase tracking-widest text-xs"
               >
                 <Plus size={20} />
                 Adicionar Registro
