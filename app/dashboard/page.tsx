@@ -27,30 +27,23 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!is_auth) return;
-
     usePrayer.getState().loadFromDatabase();
   }, [is_auth]);
 
   if (!mounted || !is_auth) return null;
 
   return (
-    <motion.div
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="min-h-screen flex flex-col items-center justify-center p-6"
-    >
+    <div className="min-h-screen w-full flex flex-col items-center justify-start pt-20 pb-12 px-6 overflow-x-hidden">
       <DashboardActions />
-      <main className="w-full max-w-4xl">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative bg-white dark:bg-[#0a0f18] p-8 md:p-16 rounded-[2.5rem] shadow-2xl border border-gray-200 dark:border-gray-800 backdrop-filter backdrop-blur-lg bg-opacity-95 dark:bg-opacity-50"
-        >
-          <PrayerCounter />
-        </motion.div>
-      </main>
-    </motion.div>
+      
+      <motion.main 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-5xl"
+      >
+        <PrayerCounter />
+      </motion.main>
+    </div>
   );
 }

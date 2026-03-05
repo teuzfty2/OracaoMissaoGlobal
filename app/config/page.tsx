@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/store/useLogin";
 import { usePrayer } from "@/store/usePrayer";
 import toast from "react-hot-toast";
 import DashboardActions from "@/components/DashboardActions";
-import { IoSettingsSharp } from "react-icons/io5";
-import { History, Edit3, Trash2, Check, X } from "lucide-react";
+import { History, Edit3, Trash2, Check, X, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ConfigPage() {
@@ -19,9 +18,23 @@ export default function ConfigPage() {
   const [editHours, setEditHours] = useState("");
   const [editMinutes, setEditMinutes] = useState("");
 
+  // PAGINAÇÃO
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 8;
+
+  const totalPages = Math.max(1, Math.ceil(history.length / itemsPerPage));
+
+  const paginatedHistory = useMemo(() => {
+    const start = (page - 1) * itemsPerPage;
+    const end = page * itemsPerPage;
+    return history.slice(start, end);
+  }, [history, page]);
+
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (page > totalPages) setPage(totalPages);
+  }, [history, totalPages, page]);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (mounted && !is_auth) {
@@ -48,7 +61,7 @@ export default function ConfigPage() {
   const handleDeleteItem = (id: string, hours: number, minutes: number) => {
     removeHistoryItem(id);
     toast.success(
-      `Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`,
+      `Registro de ${hours}h ${minutes !== 0 ? `${Math.abs(minutes)}m` : ""} removido`
     );
   };
 
@@ -62,7 +75,7 @@ export default function ConfigPage() {
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => toast.dismiss(t.id)}
-              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors flex items-center gap-1"
+              className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md flex items-center gap-1"
             >
               <X size={14} /> Cancelar
             </button>
@@ -71,174 +84,181 @@ export default function ConfigPage() {
                 clearHistory();
                 toast.dismiss(t.id);
                 toast.success("Sistema resetado com sucesso");
+                setPage(1);
               }}
-              className="px-3 py-1.5 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-1 font-bold"
+              className="px-3 py-1.5 text-xs bg-red-500 hover:bg-red-600 text-white rounded-md flex items-center gap-1 font-bold"
             >
               <Check size={14} /> Confirmar
             </button>
           </div>
         </div>
       ),
-      {
-        duration: 5000,
-        position: "top-center",
-        style: {
-          minWidth: "250px",
-          padding: "16px",
-          borderRadius: "12px",
-        },
-      },
+      { duration: 5000, position: "top-center" }
     );
   };
 
   if (!mounted || !is_auth) return null;
 
   return (
-    <div className="select-none h-screen w-full overflow-hidden flex flex-col items-center p-4 md:p-8 pt-24">
+    <div className="min-h-screen w-full flex flex-col items-center justify-start pt-20 pb-12 px-6 overflow-x-hidden select-none">
       <DashboardActions />
 
-      <div className="w-full max-w-4xl flex flex-col h-full space-y-6 pb-4">
-        {/* Cabeçalho Fixo */}
-        <div className="flex items-center gap-3 shrink-0">
-          <IoSettingsSharp
-            className="text-gray-800 dark:text-white"
-            size={28}
-          />
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            Configurações do Sistema
+      <motion.main
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-5xl space-y-8"
+      >
+        <div className="text-center space-y-1">
+          <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white uppercase">
+            Configurações <span className="text-white/20">Sistema</span>
           </h1>
-        </div>
-        {/* Seção de Edição Fixa */}
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 shrink-0"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Edit3
-              size={20}
-              className="text-gray-600 dark:text-gray-400 shrink-0"
-            />
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white break-words">
-              Ajustar Tempo Total
-            </h2>
-          </div>
-
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 break-words">
-            Use valores negativos para subtrair tempo (ex: -1 hora e -30
-            minutos).
+          <p className="text-sm md:text-base font-bold text-blue-400/60 tracking-[0.4em] uppercase">
+            Gerenciamento de Dados
           </p>
+        </div>
 
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-4 w-full">
-            <div className="flex gap-4 sm:gap-2 flex-wrap">
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 block pl-1">
-                  Horas:
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={editHours}
-                  onChange={(e) => setEditHours(e.target.value)}
-                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-gray-800 dark:text-white"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 block pl-1">
-                  Minutos:
-                </label>
-                <input
-                  type="text"
-                   inputMode="numeric"
-                  value={editMinutes}
-                  onChange={(e) => setEditMinutes(e.target.value)}
-                  className="w-24 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black/50 outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-gray-800 dark:text-white"
-                />
-              </div>
-            </div>
-            <button
-              onClick={handleEditTime}
-              className="w-full cursor-pointer sm:w-auto px-6 py-3 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:opacity-80 transition-all mt-4 sm:mt-0 self-start sm:self-center"
-            >
-              Aplicar Ajuste
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Seção de Histórico Flexível com Scroll Interno */}
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="bg-white dark:bg-[#0a0f18] p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 flex flex-col flex-1 min-h-0"
-        >
-          <div className="flex items-center justify-between mb-6 shrink-0">
-            <div className="flex items-center gap-2">
-              <History size={20} className="text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                Últimos Registros
-              </h2>
-            </div>
-            <button
-              onClick={confirmClearAll}
-              className="text-red-500 hover:text-red-600 flex items-center gap-1 text-sm font-medium cursor-pointer transition-colors"
-            >
-              <Trash2 size={16} /> Limpar Tudo
-            </button>
-          </div>
-
-          {/* Lista com Scroll Independente */}
-          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar scroll-smooth min-h-0">
-            {history.length === 0 ? (
-              <div className="h-full flex items-center justify-center">
-                <p className="text-gray-500 italic">
-                  Nenhum registro encontrado.
-                </p>
-              </div>
-            ) : (
-              history.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all"
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium text-gray-800 dark:text-white">
-                      {item.hours}h{" "}
-                      {item.minutes !== 0 ? `e ${item.minutes}` : ""}{" "}
-                      {/* Mostra o sinal real */}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {new Date(item.timestamp).toLocaleString("pt-BR")}
-                    </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* AJUSTAR TEMPO TOTAL */}
+          <div className="lg:col-span-5">
+            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl shadow-2xl space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+                    <Edit3 size={20} />
                   </div>
-
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
-                        item.type === "adicionado"
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                          : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                      }`}
-                    >
-                      {item.type}
-                    </span>
-                    <button
-                      onClick={() =>
-                        handleDeleteItem(item.id, item.hours, item.minutes)
-                      }
-                      className="p-2 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
-                      title="Excluir registro"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
+                  <h3 className="font-black text-sm text-white uppercase tracking-wider">
+                    Ajustar Tempo Total
+                  </h3>
                 </div>
-              ))
-            )}
+
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+                  Use valores negativos para subtrair tempo do contador geral.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="- Horas"
+                    value={editHours}
+                    onChange={(e) => setEditHours(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-center text-xl font-black outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="- Minutos"
+                    value={editMinutes}
+                    onChange={(e) => setEditMinutes(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-center text-xl font-black outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <button
+                  onClick={handleEditTime}
+                  className="w-full py-5 bg-white text-black font-black rounded-2xl transition-all active:scale-95 uppercase tracking-widest text-xs"
+                >
+                  Aplicar Ajuste
+                </button>
+              </div>
+            </div>
           </div>
-        </motion.div>
-      </div>
+
+          {/* HISTÓRICO */}
+          <div className="lg:col-span-7">
+            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl shadow-2xl flex flex-col h-[600px]">
+              <div className="flex items-center justify-between mb-8 shrink-0">
+                <div className="flex items-center gap-3">
+                  <History size={20} />
+                  <h3 className="font-black text-sm text-white uppercase tracking-wider">
+                    Últimos Registros
+                  </h3>
+                </div>
+
+                <button
+                  onClick={confirmClearAll}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl"
+                >
+                  <Trash2 size={16} />
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    Zerar Tudo
+                  </span>
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                {history.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center space-y-2 opacity-40">
+                    <Clock size={40} className="text-gray-400" />
+                    <p className="text-xs font-black uppercase tracking-widest text-gray-400">
+                      Nenhum registro encontrado
+                    </p>
+                  </div>
+                ) : (
+                  paginatedHistory.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="flex items-center justify-between p-5 rounded-3xl bg-black/40 border border-white/5 hover:border-blue-500/30 transition-all"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <span className="text-lg font-black text-white">
+                          {item.hours}h{" "}
+                          {item.minutes !== 0
+                            ? `${Math.abs(item.minutes)}m`
+                            : ""}
+                        </span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                          {new Date(item.timestamp).toLocaleString("pt-BR")}
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          handleDeleteItem(
+                            item.id,
+                            item.hours,
+                            item.minutes
+                          )
+                        }
+                        className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-2xl"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </motion.div>
+                  ))
+                )}
+              </div>
+
+              {history.length > 0 && (
+                <div className="flex justify-center items-center gap-6 mt-6">
+                  <button
+                    disabled={page === 1}
+                    onClick={() => setPage((p) => p - 1)}
+                    className="px-4 py-2 bg-white/10 text-white rounded-xl disabled:opacity-30"
+                  >
+                    Anterior
+                  </button>
+
+                  <span className="text-sm text-gray-400">
+                    Página {page} de {totalPages}
+                  </span>
+
+                  <button
+                    disabled={page === totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                    className="px-4 py-2 bg-white/10 text-white rounded-xl disabled:opacity-30"
+                  >
+                    Próxima
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.main>
     </div>
   );
 }
