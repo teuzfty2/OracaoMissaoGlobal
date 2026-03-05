@@ -137,7 +137,7 @@ export default function PrayerCounter() {
 
             {/* Badge de Porcentagem */}
             <div className="absolute bottom-6 md:bottom-10 bg-blue-600 text-white px-6 py-2 rounded-2xl text-lg font-black shadow-2xl border border-white/10">
-              {progressPercentage.toFixed(1)}%
+              {progressPercentage.toFixed(2)}%
             </div>
           </div>
         </div>
@@ -162,8 +162,10 @@ export default function PrayerCounter() {
                     Restante
                   </p>
                   <p className="text-2xl font-black text-white">
-                    {remainingHrs.toLocaleString("pt-BR")}:
-                    {remainingMins.toString().padStart(2, "0")} horas
+                    {remainingHrs.toLocaleString("pt-BR")}
+                    {remainingMins !== 0 &&
+                      `:${remainingMins.toString().padStart(2, "0")}`}{" "}
+                    horas
                   </p>
                 </div>
                 <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
