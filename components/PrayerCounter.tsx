@@ -68,7 +68,7 @@ export default function PrayerCounter() {
         className="text-center space-y-1"
       >
         <h1 className="text-4xl md:text-8xl font-black tracking-tighter text-white uppercase">
-          10.000 <span className="text-white/20">Horas</span>
+          10.000 <span className="text-white/50">Horas</span>
         </h1>
         <p className="text-sm md:text-base font-bold text-blue-400 tracking-[0.4em] uppercase">
           de Orações
@@ -119,11 +119,11 @@ export default function PrayerCounter() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center justify-center"
               >
-                <span className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
+                <span className="text-5xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
                   {displayHours.toLocaleString()}
                 </span>
                 <div className="flex items-center justify-center gap-2 mt-3">
-                  <span className="text-[10px] md:text-sm font-black uppercase tracking-widest text-gray-400">
+                  <span className="text-[20px] md:text-xl font-black uppercase tracking-widest text-gray-300">
                     Horas Concluídas
                   </span>
                 </div>
@@ -159,7 +159,7 @@ export default function PrayerCounter() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
                   <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">
-                    Restante
+                    Tempo Restante
                   </p>
                   <p className="text-2xl font-black text-white">
                     {remainingHrs.toLocaleString("pt-BR")}

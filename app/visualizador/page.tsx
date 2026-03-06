@@ -68,16 +68,16 @@ export default function Visualizador() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-2"
         >
-          <h1 className="text-4xl md:text-7xl font-black tracking-tighter uppercase">
-            10.000 <span className="text-white/20">Horas</span>
+          <h1 className="text-4xl md:text-9xl font-black tracking-tighter uppercase">
+            10.000 <span className="text-white/50">Horas</span>
           </h1>
-          <p className="text-xs md:text-sm font-bold text-blue-400/60 tracking-[0.4em] uppercase">
+          <p className="text-2xl md:text-2xl  font-bold text-blue-400/80 tracking-[0.4em] uppercase">
             de Orações
           </p>
         </motion.div>
 
         {/* CÍRCULO */}
-        <div className="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] md:w-[480px] md:h-[480px] flex items-center justify-center">
+        <div className="relative w-[680px] h-[680px] sm:w-[680px] sm:h-[680px] md:w-[680px] md:h-[680px] flex items-center justify-center">
           
           <svg
             viewBox="0 0 520 520"
@@ -95,8 +95,8 @@ export default function Visualizador() {
               cx="260"
               cy="260"
               r={radius}
-              className="stroke-blue-300 fill-none"
-              strokeWidth="18"
+              className="stroke-blue-500 fill-none"
+              strokeWidth="20"
               strokeLinecap="round"
               initial={{
                 strokeDasharray: circumference,
@@ -114,24 +114,24 @@ export default function Visualizador() {
 
           {/* Conteúdo central */}
           <div className="z-10">
-            <span className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-none">
+            <span className="text-8xl sm:text-8xl md:text-8xl font-black tracking-tighter leading-none">
               {displayHours.toLocaleString()}
             </span>
 
-            <p className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-400 mt-4">
+            <p className="text-3xl md:text-3xl font-black uppercase tracking-widest text-gray-300 mt-4">
               Horas Concluídas
             </p>
 
             {displayMins !== 0 && (
-              <span className="text-7xl md:text-xl font-bold text-blue-500 mt-2 block">
+              <span className="text-xl md:text-xl font-bold text-blue-500 mt-2 block">
                 + {Math.abs(displayMins)}m
               </span>
             )}
           </div>
 
           {/* Badge porcentagem */}
-          <div className="absolute bottom-4 md:bottom-8 bg-blue-600 px-6 py-2 rounded-2xl text-lg font-black shadow-xl border border-white/10">
-            {progressPercentage.toFixed(1)}%
+          <div className="absolute bottom-4 md:bottom-8 bg-blue-600 px-6 py-2 rounded-2xl text-2xl font-black shadow-xl border border-white/10">
+            {progressPercentage.toFixed(2)}%
           </div>
         </div>
 

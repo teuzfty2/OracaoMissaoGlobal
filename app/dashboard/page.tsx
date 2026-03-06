@@ -40,7 +40,7 @@ export default function Dashboard() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-5xl"
+        className="w-full max-w-7xl"
       >
         <PrayerCounter />
       </motion.main>
