@@ -24,7 +24,7 @@ export default function PrayerCounter() {
   const displayHours = Math.floor(totalMinutes / 60);
   const displayMins = totalMinutes % 60;
 
-  const progressPercentage = Math.min((displayHours / GOAL_HOURS) * 100, 100);
+  const progressPercentage = Math.min((displayHours / GOAL_HOURS) * 100);
 
   // Configurações do Círculo (Mantendo o tamanho massivo)
   const radius = 185;
@@ -67,18 +67,18 @@ export default function PrayerCounter() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-1"
       >
-        <h1 className="text-4xl md:text-8xl font-black tracking-tighter text-white uppercase">
-          10.000 <span className="text-white/50">Horas</span>
+        <h1 className="text-8xl md:text-8xl font-black tracking-tighter text-white uppercase">
+          10.000 <span className="text-white/60">Horas</span>
         </h1>
         <p className="text-sm md:text-base font-bold text-blue-400 tracking-[0.4em] uppercase">
           de Orações
         </p>
       </motion.div>
 
-      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center">
+      <div className="w-full flex-col lg:gap-4 items-center">
         {/* Coluna da Esquerda: O Contador Circular Massivo */}
         <div className="lg:col-span-7 flex flex-col items-center justify-center relative">
-          <div className="relative w-[380px] h-[380px] md:w-[520px] md:h-[520px] flex items-center justify-center">
+          <div className="relative w-96 h-96 md:w-160 md:h-160 flex items-center justify-center">
             {/* Círculo de Fundo com ViewBox para precisão total */}
             <svg
               viewBox="0 0 520 520"
@@ -119,11 +119,11 @@ export default function PrayerCounter() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center justify-center"
               >
-                <span className="text-5xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
+                <span className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
                   {displayHours.toLocaleString()}
                 </span>
                 <div className="flex items-center justify-center gap-2 mt-3">
-                  <span className="text-[20px] md:text-xl font-black uppercase tracking-widest text-gray-300">
+                  <span className="text-[15px] md:text-xl font-black uppercase tracking-widest text-gray-300">
                     Horas Concluídas
                   </span>
                 </div>

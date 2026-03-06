@@ -41,10 +41,7 @@ export default function Visualizador() {
   const displayHours = Math.floor(totalMinutes / 60);
   const displayMins = totalMinutes % 60;
 
-  const progressPercentage = Math.min(
-    (displayHours / GOAL_HOURS) * 100,
-    100
-  );
+  const progressPercentage = Math.min((displayHours / GOAL_HOURS) * 100);
 
   const radius = 185;
   const circumference = 2 * Math.PI * radius;
@@ -69,16 +66,16 @@ export default function Visualizador() {
           className="space-y-2"
         >
           <h1 className="text-4xl md:text-9xl font-black tracking-tighter uppercase">
-            10.000 <span className="text-white/50">Horas</span>
+            10.000 <span className="text-white/60">Horas</span>
           </h1>
-          <p className="text-2xl md:text-2xl  font-bold text-blue-400/80 tracking-[0.4em] uppercase">
+          <p className="text-sm md:text-2xl  font-bold text-blue-400 tracking-[0.4em] uppercase">
             de Orações
           </p>
         </motion.div>
 
         {/* CÍRCULO */}
-        <div className="relative w-[680px] h-[680px] sm:w-[680px] sm:h-[680px] md:w-[680px] md:h-[680px] flex items-center justify-center">
-          
+        <div className="relative w-[90vw] max-w-[680px] aspect-square mx-auto flex items-center justify-center"
+          >
           <svg
             viewBox="0 0 520 520"
             className="absolute inset-0 w-full h-full -rotate-90"
@@ -114,16 +111,16 @@ export default function Visualizador() {
 
           {/* Conteúdo central */}
           <div className="z-10">
-            <span className="text-8xl sm:text-8xl md:text-8xl font-black tracking-tighter leading-none">
+            <span className="text-7xl sm:text-8xl md:text-8xl font-black tracking-tighter leading-none">
               {displayHours.toLocaleString()}
             </span>
 
-            <p className="text-3xl md:text-3xl font-black uppercase tracking-widest text-gray-300 mt-4">
+            <p className="text-sm md:text-3xl font-black uppercase tracking-widest text-gray-300 mt-4">
               Horas Concluídas
             </p>
 
             {displayMins !== 0 && (
-              <span className="text-xl md:text-xl font-bold text-blue-500 mt-2 block">
+              <span className="text-sm md:text-xl font-bold text-blue-500 mt-2 block">
                 + {Math.abs(displayMins)}m
               </span>
             )}
