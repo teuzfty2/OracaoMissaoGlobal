@@ -17,7 +17,7 @@ export default function PrayerCounter() {
     0,
   );
 
-  const remainingTotalMinutes = GOAL_HOURS * 60 - totalMinutes;
+  const remainingTotalMinutes = Math.max(GOAL_HOURS * 60 - totalMinutes, 0);
   const remainingHrs = Math.floor(remainingTotalMinutes / 60);
   const remainingMins = remainingTotalMinutes % 60;
 
@@ -119,11 +119,11 @@ export default function PrayerCounter() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center justify-center"
               >
-                <span className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
+                <span className="text-8xl md:text-8xl font-black tracking-tighter text-white leading-none whitespace-nowrap">
                   {displayHours.toLocaleString()}
                 </span>
                 <div className="flex items-center justify-center gap-2 mt-3">
-                  <span className="text-[15px] md:text-xl font-black uppercase tracking-widest text-gray-300">
+                  <span className="text-[15px] font-black uppercase tracking-widest text-gray-300">
                     Horas Concluídas
                   </span>
                 </div>
@@ -168,6 +168,7 @@ export default function PrayerCounter() {
                     horas
                   </p>
                 </div>
+
                 <div className="p-4 bg-black/40 rounded-3xl border border-white/5">
                   <p className="text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">
                     Dias desde o inicio
