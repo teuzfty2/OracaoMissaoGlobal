@@ -183,11 +183,19 @@ export default function PrayerCounter() {
             <div className="h-px bg-white/10 w-full" />
 
             {/* Registro */}
-            <div className="space-y-4">
+            {/* Registro */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddPrayer();
+              }}
+              className="space-y-4"
+            >
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-yellow-500/10 rounded-lg text-yellow-500">
                   <Zap size={20} />
                 </div>
+
                 <h3 className="font-black text-sm text-white uppercase tracking-wider">
                   Registrar Tempo
                 </h3>
@@ -198,6 +206,7 @@ export default function PrayerCounter() {
                   <label className="text-[10px] font-black text-gray-400 uppercase ml-2 tracking-widest">
                     Horas
                   </label>
+
                   <input
                     type="text"
                     inputMode="numeric"
@@ -209,10 +218,12 @@ export default function PrayerCounter() {
                     className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-white text-center text-xl font-black outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
+
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-gray-400 uppercase ml-2 tracking-widest">
                     Minutos
                   </label>
+
                   <input
                     type="text"
                     inputMode="numeric"
@@ -241,13 +252,13 @@ export default function PrayerCounter() {
               </div>
 
               <button
-                onClick={handleAddPrayer}
+                type="submit"
                 className="w-full py-5 lg:py-4 bg-white text-black font-black rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg hover:opacity-90 cursor-pointer uppercase tracking-widest text-xs"
               >
                 <Plus size={20} />
                 Adicionar Registro
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

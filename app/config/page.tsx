@@ -111,7 +111,7 @@ export default function ConfigPage() {
       >
         <div className="text-center space-y-1">
           <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white uppercase">
-            Configurações <span className="text-white/20">Sistema</span>
+            Configurações  <span className="text-white/20">Sistema</span>
           </h1>
           <p className="text-sm md:text-base font-bold text-blue-400/60 tracking-[0.4em] uppercase">
             Gerenciamento de Dados
